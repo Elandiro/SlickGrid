@@ -920,23 +920,31 @@ if (typeof Slick === "undefined") {
     function createCssRules() {
       $style = $("<style type='text/css' rel='stylesheet' />").appendTo($("head"));
       var rowHeight = (options.rowHeight - cellHeightDiff);
-      var rules = [
-        "." + uid + " .slick-header-column { left: 1000px; }",
-        "." + uid + " .slick-top-panel { height:" + options.topPanelHeight + "px; }",
-        "." + uid + " .slick-headerrow-columns { height:" + options.headerRowHeight + "px; }",
-        "." + uid + " .slick-cell { height:" + rowHeight + "px; }",
-        "." + uid + " .slick-row { height:" + options.rowHeight + "px; }"
-      ];
-
-      for (var i = 0; i < columns.length; i++) {
-        rules.push("." + uid + " .l" + i + " { }");
-        rules.push("." + uid + " .r" + i + " { }");
+      if ($style[0].styleSheet) { // IE
+        $style[0].styleSheet.cssText = "";
+      } else {
+        $style[0].appendChild(document.createTextNode(""));
       }
 
-      if ($style[0].styleSheet) { // IE
-        $style[0].styleSheet.cssText = rules.join(" ");
+      var sheet = $style[0].sheet;
+      var index = 0;
+      addCSSRule(sheet, "." + uid + " .slick-header-column", "left: 1000px;", index++);
+      addCSSRule(sheet, "." + uid + " .slick-top-panel", "height:" + options.topPanelHeight + "px;", index++);
+      addCSSRule(sheet, "." + uid + " .slick-headerrow-columns", "height:" + options.headerRowHeight + "px;", index++);
+      addCSSRule(sheet, "." + uid + " .slick-cell", "height:" + rowHeight + "px;", index++);
+      addCSSRule(sheet, "." + uid + " .slick-row", "height:" + options.rowHeight + "px;", index++);
+
+      for (var i = 0; i < columns.length; i++) {
+          addCSSRule(sheet, "." + uid + " .l" + i, "", index++);
+          addCSSRule(sheet, "." + uid + " .r" + i, "", index++);
+        }
+    }
+
+    function addCSSRule(sheet, selector, rules, index) {
+      if (sheet.insertRule) {
+        sheet.insertRule(selector + "{" + rules + "}", index);
       } else {
-        $style[0].appendChild(document.createTextNode(rules.join(" ")));
+        sheet.addRule(selector, rules, index);
       }
     }
 
@@ -1515,7 +1523,7 @@ if (typeof Slick === "undefined") {
       } else {
         $canvas[0].removeChild(cacheEntry.rowNode);
       }
-      
+
       delete rowsCache[row];
       delete postProcessedRows[row];
       renderedRows--;
@@ -2162,7 +2170,7 @@ if (typeof Slick === "undefined") {
           $canvas[0].removeChild(zombieRowNodeFromLastMouseWheelEvent);
           zombieRowNodeFromLastMouseWheelEvent = null;
         }
-        rowNodeFromLastMouseWheelEvent = rowNode;      
+        rowNodeFromLastMouseWheelEvent = rowNode;
       }
     }
 
@@ -2217,7 +2225,7 @@ if (typeof Slick === "undefined") {
             cancelEditAndSetFocus();
           } else if (e.which == 34) {
             navigatePageDown();
-            handled = true;           
+            handled = true;
           } else if (e.which == 33) {
             navigatePageUp();
             handled = true;
@@ -2774,7 +2782,7 @@ if (typeof Slick === "undefined") {
         var prevActivePosX = activePosX;
         while (cell <= activePosX) {
           if (canCellBeActive(row, cell)) {
-            prevCell = cell;  
+            prevCell = cell;
           }
           cell += getColspan(row, cell);
         }
