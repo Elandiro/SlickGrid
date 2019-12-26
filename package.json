@@ -1,0 +1,24 @@
+{
+  "name": "slickgrid",
+  "version": "1.0.0",
+  "description": "Find documentation and examples in [the wiki](https://github.com/mleibman/SlickGrid/wiki).",
+  "main": "slick.core.js",
+  "directories": {
+    "example": "examples",
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elandiro/SlickGrid.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Elandiro/SlickGrid/issues"
+  },
+  "homepage": "https://github.com/Elandiro/SlickGrid#readme"
+}
